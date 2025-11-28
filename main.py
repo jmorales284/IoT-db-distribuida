@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from cassandra.cluster import Cluster
 from cassandra.policies import DCAwareRoundRobinPolicy
+from fastapi.middleware.cors import CORSMiddleware
 
 from dotenv import load_dotenv
 
@@ -17,6 +18,14 @@ DATACENTER = os.getenv("CASSANDRA_DATACENTER", "datacenter1")
 KEYSPACE = os.getenv("CASSANDRA_KEYSPACE", "iot")
 
 app = FastAPI(title="IoT Readings API - Cassandra Distributed (Cloud Run)")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 cluster = None
 session = None
